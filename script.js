@@ -1,26 +1,38 @@
 //your code here
 
-class OutOfRangeError extends Error {
-  constructor() {
-    super();
-    this.name = this.constructor.name;
-    this.message = "Expression should only consist of integers and +-/* characters and not <arg>";
+function call() {
+    const input = document.getElementById("expression").value.trim();
+    const validChars = /^[-+*/\d\s]+$/;
+  
+    if (!validChars.test(input)) {
+      throw new OutOfRangeError(input);
+    }
+  
+    const result = eval(input);
+  
+    if (!Number.isInteger(result)) {
+      throw new InvalidExprError();
+    }
+  
+    alert(`Result: ${result}`);
   }
-}
-
-class InvalidExprError extends Error {
-  constructor() {
-    super();
-    this.name = this.constructor.name;
-    this.message = "Expression should not have an invalid combination of expression";
+  
+  class OutOfRangeError extends Error {
+    constructor(arg) {
+      super();
+      this.name = "OutOfRangeError";
+      alert(this.message = `Expression should only consist of integers and +-/* characters and not ${arg}`);
+    }
   }
-}
-
-function evalString(expression) {
-  if (expression.match(/[-+*/]{2}/g)) {
-    throw new InvalidExprError();
+  
+  class InvalidExprError extends Error {
+    constructor() {
+      super();
+      this.name = "InvalidExprError";
+      alert(this.message = "Expression should only evaluate addition, subtraction, multiplication, division of positive and negative integers");
+    }
   }
-
+  
   if (expression.match(/^[+*/]/)) {
     throw new SyntaxError("Expression should not start with an invalid operator");
   }
